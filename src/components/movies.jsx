@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
-import Like from "./common/like";
 import ListGroup from "./common/listGroup";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
+import MoviesTable from "./moviesTable";
 
 class Movies extends Component {
   state = {
@@ -69,45 +69,11 @@ class Movies extends Component {
               movies in the database
             </strong>
           </p>
-          <table
-            className='table table-dark table-hover'
-            style={{ borderRadius: "5px 5px 0 0" }}
-          >
-            <thead className='bg-warning' style={{ color: "#333" }}>
-              <tr>
-                <th>Title</th>
-                <th>Genre</th>
-                <th>Stock</th>
-                <th>Rate</th>
-                <th />
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {pageMovies.map((movie) => (
-                <tr key={movie._id}>
-                  <td>{movie.title}</td>
-                  <td>{movie.genre.name}</td>
-                  <td>{movie.numberInStock}</td>
-                  <td>{movie.dailyRentalRate}</td>
-                  <td>
-                    <Like
-                      liked={movie.liked}
-                      onClick={() => this.handleLike(movie)}
-                    />
-                  </td>
-                  <td>
-                    <button
-                      className='btn btn-danger btn-sm float-right badge-pill'
-                      onClick={() => this.handleDelete(movie)}
-                    >
-                      delete <i className='fa fa-trash'></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <MoviesTable
+            movies={pageMovies}
+            onDelete={this.handleDelete}
+            onLike={this.handleLike}
+          />
           <Pagination
             itemsCount={filteredMovies.length}
             pageSize={pageSize}
