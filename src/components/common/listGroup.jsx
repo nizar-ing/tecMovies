@@ -12,7 +12,7 @@ const ListGroup = (props) => {
     <ul className='list-group list-group mt-3' style={{ cursor: "pointer" }}>
       {items.map((item) => (
         <li
-          key={item[valueProperty] ? item[valueProperty] : 0}
+          key={item[valueProperty]}
           className={
             item === selectedItem
               ? "list-group-item active"
