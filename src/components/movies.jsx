@@ -5,6 +5,7 @@ import ListGroup from "./common/listGroup";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import MoviesTable from "./moviesTable";
+import _ from "lodash";
 
 class Movies extends Component {
   state = {
@@ -13,6 +14,7 @@ class Movies extends Component {
     selectedGenre: null,
     pageSize: 4,
     currentPage: 1,
+    sortColumn: { field: "title", order: "asc" },
   };
 
   componentDidMount() {
@@ -42,17 +44,36 @@ class Movies extends Component {
   };
 
   handleSort = (propertyField) => {
-    console.log(propertyField);
+    const sortColumn = { ...this.state.sortColumn };
+    if (sortColumn.field === propertyField) {
+      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
+    } else {
+      sortColumn.field = propertyField;
+      sortColumn.order = "asc";
+    }
+    this.setState({ sortColumn });
   };
 
   render() {
     const { length: count } = this.state.movies;
-    const { pageSize, currentPage, selectedGenre, movies, genres } = this.state;
+    const {
+      pageSize,
+      currentPage,
+      selectedGenre,
+      movies,
+      genres,
+      sortColumn,
+    } = this.state;
     const filteredMovies =
       selectedGenre && selectedGenre._id
         ? movies.filter((item) => item.genre._id === selectedGenre._id)
         : movies;
-    const pageMovies = paginate(filteredMovies, currentPage, pageSize);
+    const sortedMovies = _.orderBy(
+      filteredMovies,
+      [sortColumn.field],
+      [sortColumn.order]
+    );
+    const pageMovies = paginate(sortedMovies, currentPage, pageSize);
     if (count === 0) return <p>There are no movies in the database</p>;
     return (
       <div className='row'>
