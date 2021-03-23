@@ -3,18 +3,31 @@ import Input from "./common/input";
 class LoginForm extends Component {
   state = {
     account: { username: "", password: "" },
+    errors: {},
   };
-  username = React.createRef();
 
   //   componentDidMount() {
   //     this.username.current.focus();
   //   }
+  validate = () => {
+    const errors = {};
+    const { account } = this.state;
+    if (account.password.trim() === "")
+      errors.password = "Password is required";
+    if (account.username.trim() === "")
+      errors.username = "Username is required";
+    return Object.keys(errors).length === 0 ? null : errors;
+  };
   handleSubmit = (e) => {
     e.preventDefault();
 
     // call server
-    const username = this.username.current.value;
-    console.log(`Form Submitted with ${username}`);
+    // const username = this.username.current.value;
+    // console.log(`Form Submitted with ${username}`);
+    const errors = this.validate();
+    this.setState({ errors: errors || {} });
+    if (errors) return;
+    console.log("form submitted");
   };
   handleChange = ({ currentTarget: input }) => {
     const account = { ...this.state.account };
@@ -22,16 +35,17 @@ class LoginForm extends Component {
     this.setState({ account });
   };
   render() {
-    const { account } = this.state;
+    const { account, errors } = this.state;
     return (
       <div className='row align-items-center'>
         <div className='col'></div>
         <div
           className='col m-3'
           style={{
-            border: "1px solid #243342",
+            border: "3px solid #243342",
             padding: "20px 60px",
             borderRadius: "10px",
+            backgroundColor: "#E0E0E0",
           }}
         >
           <h2 className='text-info'>
@@ -39,10 +53,12 @@ class LoginForm extends Component {
           </h2>
           <form onSubmit={this.handleSubmit}>
             <Input
+              autoFocus={true}
               type='text'
               name='username'
               label='Username'
               value={account.username}
+              error={errors.username}
               onChange={this.handleChange}
             />
             <Input
@@ -50,10 +66,16 @@ class LoginForm extends Component {
               name='password'
               label='Password'
               value={account.password}
+              error={errors.password}
               onChange={this.handleChange}
             />
             <div className='text-center'>
-              <button className='btn btn-warning'>
+              <button
+                className='btn btn-warning badge-pill'
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
                 Connection <i className='fa fa-sign-in'></i>
               </button>
             </div>
