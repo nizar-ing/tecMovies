@@ -8,6 +8,7 @@ import NotFound from "./components/notFound";
 import Rentals from "./components/rentals";
 import LoginForm from "./components/loginForm";
 import "./App.css";
+import RegisterForm from "./components/registerForm";
 function App() {
   return (
     <React.Fragment>
@@ -15,6 +16,7 @@ function App() {
       <main className='container mt-3'>
         <Switch>
           <Route path='/login' component={LoginForm} />
+          <Route path='/register' component={RegisterForm} />
           <Route path='/movies/:id' component={MovieForm} />
           <Route path='/movies' component={Movies} />
           <Route path='/customers' component={Customers} />
