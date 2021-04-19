@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link, NavLink } from "react-router-dom";
+import Logo from "../icons/in_logo.png";
 class Navbar extends Component {
   render() {
     return (
@@ -7,7 +8,7 @@ class Navbar extends Component {
         <Link className='navbar-brand' to='/'>
           <img
             className='mr-2'
-            src='in_logo.png'
+            src={Logo}
             alt=''
             style={{
               width: "35px",

@@ -89,6 +89,9 @@ class Movies extends Component {
           />
         </div>
         <div className='col'>
+          <a className='btn btn-success mb-3' href='/movie/new'>
+            New Movie <i className='fa fa-plus'></i>
+          </a>
           <p>
             <strong>
               showing
