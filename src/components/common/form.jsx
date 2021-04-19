@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
+import Input from "./input";
 class Form extends Component {
   state = {
     data: {},
@@ -39,6 +40,33 @@ class Form extends Component {
     const data = { ...this.state.data };
     data[input.name] = input.value;
     this.setState({ data, errors });
+  };
+  renderButton = (label, iconClass) => {
+    return (
+      <button
+        className='btn btn-warning badge-pill'
+        disabled={this.validate()}
+        style={{
+          fontWeight: "bold",
+        }}
+      >
+        {label} <i className={iconClass}></i>
+      </button>
+    );
+  };
+  renderInput = (autofocus, name, label, type = "text") => {
+    const { data, errors } = this.state;
+    return (
+      <Input
+        autoFocus={autofocus}
+        type={type}
+        name={name}
+        label={label}
+        value={data[name]}
+        error={errors[name]}
+        onChange={this.handleChange}
+      />
+    );
   };
 }
 

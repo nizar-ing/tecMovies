@@ -1,6 +1,5 @@
 import React from "react";
 import Joi from "joi-browser";
-import Input from "./common/input";
 import Form from "./common/form";
 class LoginForm extends Form {
   state = {
@@ -23,7 +22,6 @@ class LoginForm extends Form {
   };
 
   render() {
-    const { data, errors } = this.state;
     return (
       <div className='row align-items-center'>
         <div className='col'></div>
@@ -40,33 +38,10 @@ class LoginForm extends Form {
             Login <i className='fa fa-user'></i>
           </h2>
           <form onSubmit={this.handleSubmit}>
-            <Input
-              autoFocus={true}
-              type='text'
-              name='username'
-              label='Username'
-              value={data.username}
-              error={errors.username}
-              onChange={this.handleChange}
-            />
-            <Input
-              type='password'
-              name='password'
-              label='Password'
-              value={data.password}
-              error={errors.password}
-              onChange={this.handleChange}
-            />
+            {this.renderInput(true, "username", "Username")}
+            {this.renderInput(false, "password", "Password", "password")}
             <div className='text-center'>
-              <button
-                className='btn btn-warning badge-pill'
-                disabled={this.validate()}
-                style={{
-                  fontWeight: "bold",
-                }}
-              >
-                Connection <i className='fa fa-sign-in'></i>
-              </button>
+              {this.renderButton("Connection", "fa fa-sign-in")}
             </div>
           </form>
         </div>
