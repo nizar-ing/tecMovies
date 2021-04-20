@@ -7,6 +7,7 @@ import { paginate } from "../utils/paginate";
 import MoviesTable from "./moviesTable";
 import _ from "lodash";
 import { Link } from "react-router-dom";
+import SearchBox from "./searchBox";
 
 class Movies extends Component {
   state = {
@@ -14,6 +15,7 @@ class Movies extends Component {
     genres: [],
     selectedGenre: null,
     pageSize: 4,
+    searchQuery: "",
     currentPage: 1,
     sortColumn: { field: "title", order: "asc" },
   };
@@ -41,11 +43,15 @@ class Movies extends Component {
   };
 
   handleGenreSelect = (item) => {
-    this.setState({ selectedGenre: item, currentPage: 1 });
+    this.setState({ selectedGenre: item, searchQuery: "", currentPage: 1 });
   };
 
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
+  };
+
+  handleSearch = (query) => {
+    this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
   };
 
   getPagedData = () => {
@@ -53,13 +59,20 @@ class Movies extends Component {
       pageSize,
       currentPage,
       selectedGenre,
+      searchQuery,
       movies,
       sortColumn,
     } = this.state;
-    const filteredMovies =
-      selectedGenre && selectedGenre._id
-        ? movies.filter((item) => item.genre._id === selectedGenre._id)
-        : movies;
+    let filteredMovies = movies;
+    if (searchQuery) {
+      filteredMovies = movies.filter((m) =>
+        m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    } else if (selectedGenre && selectedGenre._id) {
+      filteredMovies = movies.filter(
+        (item) => item.genre._id === selectedGenre._id
+      );
+    }
     const sortedMovies = _.orderBy(
       filteredMovies,
       [sortColumn.field],
@@ -68,12 +81,14 @@ class Movies extends Component {
     const pageMovies = paginate(sortedMovies, currentPage, pageSize);
     return { totalCount: filteredMovies.length, data: pageMovies };
   };
+
   render() {
     const { length: count } = this.state.movies;
     const {
       pageSize,
       currentPage,
       selectedGenre,
+      searchQuery,
       genres,
       sortColumn,
     } = this.state;
@@ -103,6 +118,7 @@ class Movies extends Component {
               movies in the database
             </strong>
           </p>
+          <SearchBox value={searchQuery} onChange={this.handleSearch} />
           <MoviesTable
             movies={moviesPage}
             sortColumn={sortColumn}
