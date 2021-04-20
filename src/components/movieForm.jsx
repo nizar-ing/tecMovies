@@ -18,7 +18,11 @@ class MovieForm extends Form {
       .min(0)
       .max(100)
       .label("Number inStock"),
-    dailyRentalRate: Joi.number().required().min(0).max(10).label("Rate"),
+    dailyRentalRate: Joi.number()
+      .required()
+      .min(0)
+      .max(10)
+      .label("Daily Rental Rate"),
   };
   componentDidMount() {
     const genres = getGenres();
@@ -34,19 +38,16 @@ class MovieForm extends Form {
     return {
       _id: movie._id,
       title: movie.title,
-      genreId: movie.genre["_id"],
+      genreId: movie.genre._id,
       numberInStock: movie.numberInStock,
       dailyRentalRate: movie.dailyRentalRate,
     };
   };
   doSubmit = () => {
-    const { data } = this.state;
-    const { history } = this.props;
-    saveMovie(data);
-    history.push("/movies");
+    saveMovie(this.state.data);
+    this.props.history.push("/movies");
   };
   render() {
-    const { history } = this.props;
     const { genres } = this.state;
     return (
       <div>
@@ -57,11 +58,9 @@ class MovieForm extends Form {
           {this.renderInput(false, "numberInStock", "Number in Stock")}
           {this.renderInput(false, "dailyRentalRate", "Rate")}
           <div className='text-center'>
-            {console.log(this.validate())}
             <button
               className='btn btn-warning'
               disabled={this.validate()}
-              onClick={() => history.push("/movies")}
               style={{ fontWeight: "bold", padding: "5px 30px" }}
             >
               save <i className='fa fa-database'></i>
