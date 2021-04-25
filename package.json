@@ -1,6 +1,6 @@
 {
-  "name": "vidly",
-  "version": "0.1.0",
+  "name": "tec_movies",
+  "version": "1.3.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
