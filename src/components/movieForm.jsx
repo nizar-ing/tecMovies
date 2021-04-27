@@ -29,15 +29,15 @@ class MovieForm extends Form {
     this.setState({ genres });
   }
   async populateMovie(){
-    const { match, history } = this.props;
-    const movieId = match.params.id;
-    if (movieId === "new") return;
     try{
+      const movieId = this.props.match.params.id;
+      if (movieId === "new") return;
+
       const {data: movie} = await getMovie(movieId);
       this.setState({ data: this.mapToViewModel(movie) });
     } catch (e) {
       if(e.response && e.response.status === 404){
-        history.replace("/not-found");
+        this.props.history.replace("/not-found");
       }
     }
   }
@@ -54,8 +54,8 @@ class MovieForm extends Form {
       dailyRentalRate: movie.dailyRentalRate,
     };
   };
-  doSubmit = () => {
-    saveMovie(this.state.data);
+  doSubmit = async() => {
+    await saveMovie(this.state.data);
     this.props.history.push("/movies");
   };
   render() {
