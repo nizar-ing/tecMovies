@@ -24,10 +24,12 @@ class MovieForm extends Form {
       .max(10)
       .label("Daily Rental Rate"),
   };
-  async componentDidMount() {
+  async populateGenres(){
     const {data: genres} = await getGenres();
-    const { match, history } = this.props;
     this.setState({ genres });
+  }
+  async populateMovie(){
+    const { match, history } = this.props;
     const movieId = match.params.id;
     if (movieId === "new") return;
     try{
@@ -38,6 +40,10 @@ class MovieForm extends Form {
         history.replace("/not-found");
       }
     }
+  }
+  async componentDidMount() {
+    await this.populateGenres();
+    await this.populateMovie();
   }
   mapToViewModel = (movie) => {
     return {
