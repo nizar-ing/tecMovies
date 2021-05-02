@@ -17,16 +17,17 @@ class RegisterForm extends Form {
 
   doSubmit = async () => {
     //call the server
-      try{
-        await register(this.state.data);
-      } catch(e){
-          if(e.response && e.response.status === 400){
-              const errors = { ...this.state.errors};
-              errors.username = e.response.data;
-              this.setState({errors});
-          }
+    try {
+      const response = await register(this.state.data);
+      localStorage.setItem("token", response.headers["x-auth-token"]);
+      this.props.history.push("/");
+    } catch (e) {
+      if (e.response && e.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = e.response.data;
+        this.setState({ errors });
       }
-
+    }
   };
 
   render() {
