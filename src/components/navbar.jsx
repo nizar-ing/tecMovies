@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import Logo from "../icons/in_logo.png";
 class Navbar extends Component {
   render() {
+    const { user } = this.props;
     return (
       <nav className='navbar navbar-expand-lg  navbar-light bg-warning h6'>
         <Link className='navbar-brand' to='/'>
@@ -38,12 +39,26 @@ class Navbar extends Component {
             <NavLink className='nav-item nav-link' to='/rentals'>
               Rentals
             </NavLink>
-            <NavLink className='nav-item nav-link' to='/login'>
-              Login
-            </NavLink>
-            <NavLink className='nav-item nav-link' to='/register'>
-              Register
-            </NavLink>
+            {!user && (
+              <React.Fragment>
+                <NavLink className='nav-item nav-link' to='/login'>
+                  Login
+                </NavLink>
+                <NavLink className='nav-item nav-link' to='/register'>
+                  Register
+                </NavLink>
+              </React.Fragment>
+            )}
+            {user && (
+              <React.Fragment>
+                <NavLink className='nav-item nav-link' to='/profile'>
+                  {user.name}
+                </NavLink>
+                <NavLink className='nav-item nav-link' to='/logout'>
+                  Logout
+                </NavLink>
+              </React.Fragment>
+            )}
           </div>
         </div>
       </nav>
