@@ -32,13 +32,13 @@ class Movies extends Component {
     const originalMovies = this.state.movies;
     const movies = originalMovies.filter((m) => m._id !== movie._id);
     this.setState({ movies });
-    try{
+    try {
       await deleteMovie(movie._id);
-    }catch (e) {
-      if(e.response && e.response.status === 404){
-          toast.error('This movie has already been deleted.');
+    } catch (e) {
+      if (e.response && e.response.status === 404) {
+        toast.error("This movie has already been deleted.");
       }
-      this.setState({movies: originalMovies});
+      this.setState({ movies: originalMovies });
     }
   };
 
@@ -104,7 +104,7 @@ class Movies extends Component {
       genres,
       sortColumn,
     } = this.state;
-
+    const { user } = this.props;
     if (count === 0) return <p>There are no movies in the database</p>;
     const { totalCount, data: moviesPage } = this.getPagedData();
     return (
@@ -117,10 +117,12 @@ class Movies extends Component {
           />
         </div>
         <div className='col'>
-          <Link className='btn btn-success mb-3' to='/movies/new'>
-            New Movie <i className='fa fa-plus ml-2'></i>
-            <i className='fa fa-film ml-1'></i>
-          </Link>
+          {user && (
+            <Link className='btn btn-success mb-3' to='/movies/new'>
+              New Movie <i className='fa fa-plus ml-2'></i>
+              <i className='fa fa-film ml-1'></i>
+            </Link>
+          )}
           <p>
             <strong>
               showing
