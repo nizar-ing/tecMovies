@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import Joi from "joi-browser";
 import Form from "./common/form";
 import Auth from "../services/authService";
@@ -36,6 +37,7 @@ class LoginForm extends Form {
   };
 
   render() {
+    if (Auth.getCurrentUser()) return <Redirect to='/' />;
     return (
       <div className='row align-items-center'>
         <div className='col-3'></div>
